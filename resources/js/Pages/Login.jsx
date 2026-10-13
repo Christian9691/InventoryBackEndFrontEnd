@@ -12,11 +12,12 @@ export default function Login() {
     post("/login");
   }
 
-  const error = errors.UserName || errors.Password;
+  const error = errors.UserName || errors.Password || errors.login;
 
   return (
     <div className="login-page">
       <Head title="Log in" />
+
       <div className="login-card">
         <div className="login-brand">
           <span className="login-brand-icon">⚡</span>
@@ -25,37 +26,50 @@ export default function Login() {
         </div>
 
         <form onSubmit={handleSubmit} className="login-form">
-          <label>
+          <label htmlFor="username">
             Username
             <input
+              id="username"
+              name="UserName"
               type="text"
               value={data.UserName}
               onChange={(e) => setData("UserName", e.target.value)}
               placeholder="Enter username"
+              autoComplete="username"
               autoFocus
+              required
             />
           </label>
 
-          <label>
+          <label htmlFor="password">
             Password
             <input
+              id="password"
+              name="Password"
               type="password"
               value={data.Password}
               onChange={(e) => setData("Password", e.target.value)}
               placeholder="Enter password"
+              autoComplete="current-password"
+              required
             />
           </label>
 
-          {error && <p className="login-error">{error}</p>}
+          {error && (
+            <p className="login-error" role="alert">
+              {error}
+            </p>
+          )}
 
-          <button type="submit" className="btn btn-primary login-submit-btn" disabled={processing}>
-            Log In
+          <button
+            type="submit"
+            className="btn btn-primary login-submit-btn"
+            disabled={processing}
+          >
+            {processing ? "Logging in..." : "Log In"}
           </button>
         </form>
 
-        <p className="login-hint">
-          Demo accounts: admin/admin123 · juan/juan123 · maria/maria123 · pedro/pedro123
-        </p>
         <p className="login-hint">
           Don't have an account? <Link href="/signup">Sign up</Link>
         </p>
