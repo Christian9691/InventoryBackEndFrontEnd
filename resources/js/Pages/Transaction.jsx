@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import { AppContext } from "../context/AppContext";
 import { canRecordPurchases } from "../config/permissions";
+import SearchSelect from "../components/SearchSelect";
 
 const STOCK_IN_EMPTY = {
   ProductID: "",
@@ -86,6 +87,11 @@ function StockInForm() {
     e.preventDefault();
     setMessage(null);
 
+    if (!form.ProductID) {
+      setMessage({ type: "error", text: "Please pick a product from the list." });
+      return;
+    }
+
     if (isFifo && !form.ExpirationDate) {
       setMessage({ type: "error", text: "Expiry Date is required for this product." });
       return;
@@ -115,18 +121,15 @@ function StockInForm() {
       <form onSubmit={handleSubmit} className="form-grid">
         <label>
           Product
-          <select
-            required
+          <SearchSelect
+            placeholder="Type to search product..."
             value={form.ProductID}
-            onChange={(e) => handleChange("ProductID", e.target.value)}
-          >
-            <option value="">Select product</option>
-            {products.map((p) => (
-              <option key={p.ProductID} value={p.ProductID}>
-                {p.ProductName}
-              </option>
-            ))}
-          </select>
+            onChange={(val) => handleChange("ProductID", val)}
+            options={products.map((p) => ({
+              value: p.ProductID,
+              label: p.ProductName,
+            }))}
+          />
         </label>
 
         <label>
@@ -248,6 +251,11 @@ function StockOutForm() {
     e.preventDefault();
     setMessage(null);
 
+    if (!form.ProductID) {
+      setMessage({ type: "error", text: "Please pick a product from the list." });
+      return;
+    }
+
     if (notesRequired && !form.Notes.trim()) {
       setMessage({
         type: "error",
@@ -289,18 +297,15 @@ function StockOutForm() {
       <form onSubmit={handleSubmit} className="form-grid">
         <label>
           Product
-          <select
-            required
+          <SearchSelect
+            placeholder="Type to search product..."
             value={form.ProductID}
-            onChange={(e) => handleChange("ProductID", e.target.value)}
-          >
-            <option value="">Select product</option>
-            {products.map((p) => (
-              <option key={p.ProductID} value={p.ProductID}>
-                {p.ProductName}
-              </option>
-            ))}
-          </select>
+            onChange={(val) => handleChange("ProductID", val)}
+            options={products.map((p) => ({
+              value: p.ProductID,
+              label: p.ProductName,
+            }))}
+          />
         </label>
 
         <label>
